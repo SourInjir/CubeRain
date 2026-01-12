@@ -1,13 +1,23 @@
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class CollidingObject : MonoBehaviour
 {
-    private bool _isColide = false;
+    private Renderer _renderer;
     private bool _canChangeColor = true;
+    public Action OnDisableRequest;
+    public bool _isColide { get; private set; } = false;
 
-    public bool GetIsColide() => _isColide;
+    private void Awake()
+    {
 
+        if(gameObject.TryGetComponent<Renderer>(out var renderer))
+        {
+            _renderer = renderer;
+        }
+
+    }
     private void OnEnable()
     {
         _isColide = false;
@@ -26,11 +36,13 @@ public class CollidingObject : MonoBehaviour
 
     public void ChangeColor()
     {
-        if(_canChangeColor == true && gameObject.TryGetComponent<Renderer>(out var renderer))
+
+        if(_canChangeColor == true && _renderer != null)
         {
             _canChangeColor = false;
-            renderer.material.color = new Color(Random.value, Random.value, Random.value);
+            _renderer.material.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
         }
+
     }
 
 }

@@ -3,25 +3,22 @@ using System.Collections.Generic;
 
 public class GameMode : MonoBehaviour
 {
+    [Header("Dependencies")]
+    [SerializeField] private SystemEventChannel _systemEventChannel;
+    [SerializeField] private CollidingObjectPool _objectPool;
+    [SerializeField] private GameObject _spawnPoint;
+    [SerializeField] private float _spawnRadius = 10.0f;
+
     private const float SpawnChanse = 100f;
     private const int MinSpawnCount = 2;
     private const int MaxSpawnCount = 6;
     private const float SpawnDelay = 1.0f;
-
-    [Header("Dependencies")]
-    [SerializeField] private SystemEventChannel _systemEventChannel;
-    [SerializeField] private CubePool _cubePool;
-    [SerializeField] private GameObject _spawnPoint;
-    [SerializeField] private float _spawnRadius = 10.0f;
-
     private float spawnFactor = 1f;
-   
-
     private CubeSpawner _cubeSpawner;
 
     private void Awake()
     {
-        _cubeSpawner = new CubeSpawner(_cubePool);
+        _cubeSpawner = new CubeSpawner(_objectPool);
     }
 
     private void Start()

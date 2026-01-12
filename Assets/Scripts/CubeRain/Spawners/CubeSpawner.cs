@@ -1,28 +1,31 @@
 using UnityEngine;
-public class CubeSpawner: ObjectSpawner
+public class CubeSpawner
 {
+    protected CollidingObjectPool _pool;
+    protected SystemEventChannel _eventChannel;
+
     private const int MinSpawnCount = 2;
     private const int MaxSpawnCount = 6;
     private const float ScaleFactor = 0.5f;
     private const float ObjectLifeTime = 20.0f;
 
-    public CubeSpawner(CubePool pool) : base(pool)
+    public CubeSpawner(CollidingObjectPool pool)
     {
-       
+        _pool = pool;
     }
 
     public GameObject SpawnObject(Vector3 position, Vector3 scale)
     {
-        var obj = _pool.Get();
-        obj.transform.position = position;
-        obj.transform.localScale = scale * ScaleFactor;
+        CollidingObject obj = _pool.Spawn();
+        obj.gameObject.transform.position = position;
+        obj.gameObject.transform.localScale = scale * ScaleFactor;
 
-        if (obj.TryGetComponent<Renderer>(out var renderer))
+        if (obj.gameObject.TryGetComponent<Renderer>(out var renderer))
         {
             renderer.material.color = new Color(1, 1, 1);
         }
 
-        return obj;
+        return obj.gameObject;
     }
 
     public void SpawnRandomQuantity(int min, int max, Vector3 spawnPosition, float radius)
@@ -32,7 +35,7 @@ public class CubeSpawner: ObjectSpawner
 
         for (int i = 0; i < count; i++)
         {
-            var objInstance = SpawnObject(GetRandomPositionInCircle(spawnPosition, radius), new Vector3(1,1,1));
+            SpawnObject(GetRandomPositionInCircle(spawnPosition, radius), new Vector3(1,1,1));
         }
 
     }
