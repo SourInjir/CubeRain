@@ -9,11 +9,11 @@ public class Platform : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.TryGetComponent<CollidingObject>(out var collidingObject))
-        {
-            collidingObject.ChangeColor();
-            _eventChannel.DispatchObjectCollideEvent(other.gameObject);
-        }
+        //if (other.TryGetComponent<CollidingObject>(out var collidingObject))
+        //{
+        //    collidingObject.ChangeColor();
+        //    _eventChannel.DispatchObjectCollideEvent(other.gameObject);
+        //}
 
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class CollidingObjectPool : MonoBehaviour
+public class CollidingObjectPoolFacade : MonoBehaviour
 {
     [SerializeField] private CollidingObject _prefab;
     [SerializeField] private SystemEventChannel _eventChannel;
@@ -29,18 +29,13 @@ public class CollidingObjectPool : MonoBehaviour
         _eventChannel.ObjectCollide -= ObjectCollideHandler;
     }
 
-    private void ObjectCollideHandler(GameObject obj)
+    private void ObjectCollideHandler(CollidingObject obj)
     {
 
-        if (obj.TryGetComponent<CollidingObject>(out var colidingObj))
+        if (obj.IsCollide == false)
         {
-
-            if (colidingObj._isColide == false)
-            {
-                colidingObj.SetIsColide(true);
-                ReturnWithDelay(colidingObj, Random.Range(_minLifeTime, _maxLifeTime));
-            }
-
+            obj.SetIsCollide(true);
+            ReturnWithDelay(obj, Random.Range(_minLifeTime, _maxLifeTime));
         }
 
     }
@@ -48,7 +43,7 @@ public class CollidingObjectPool : MonoBehaviour
     private CollidingObject CreatePooledItem()
     {
         CollidingObject obj = Instantiate(_prefab);
-        obj.OnDisableRequest += () => _pool.Release(obj);
+        obj.SetEventChannel(_eventChannel);
         return obj;
     }
 

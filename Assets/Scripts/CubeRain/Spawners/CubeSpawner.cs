@@ -1,7 +1,7 @@
 using UnityEngine;
 public class CubeSpawner
 {
-    protected CollidingObjectPool _pool;
+    protected CollidingObjectPoolFacade _poolFacade;
     protected SystemEventChannel _eventChannel;
 
     private const int MinSpawnCount = 2;
@@ -9,14 +9,14 @@ public class CubeSpawner
     private const float ScaleFactor = 0.5f;
     private const float ObjectLifeTime = 20.0f;
 
-    public CubeSpawner(CollidingObjectPool pool)
+    public CubeSpawner(CollidingObjectPoolFacade poolFacade)
     {
-        _pool = pool;
+        _poolFacade = poolFacade;
     }
 
     public GameObject SpawnObject(Vector3 position, Vector3 scale)
     {
-        CollidingObject obj = _pool.Spawn();
+        CollidingObject obj = _poolFacade.Spawn();
         obj.gameObject.transform.position = position;
         obj.gameObject.transform.localScale = scale * ScaleFactor;
 

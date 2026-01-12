@@ -4,10 +4,12 @@ using System;
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class CollidingObject : MonoBehaviour
 {
+    [SerializeField] private SystemEventChannel _eventChannel;
+
     private Renderer _renderer;
     private bool _canChangeColor = true;
-    public Action OnDisableRequest;
-    public bool _isColide { get; private set; } = false;
+
+    public bool IsCollide { get; private set; } = false;
 
     private void Awake()
     {
@@ -18,20 +20,42 @@ public class CollidingObject : MonoBehaviour
         }
 
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.TryGetComponent<Platform>(out var platform))
+        {
+            ChangeColor();
+
+            if (_eventChannel != null)
+            {
+                _eventChannel.DispatchObjectCollideEvent(this);
+            }
+
+        }
+
+    }
+
     private void OnEnable()
     {
-        _isColide = false;
+        IsCollide = false;
         _canChangeColor = true;
     }
 
-    public void SetIsColide(bool value = false)
+    public void SetIsCollide(bool value = false)
     {
-        _isColide = value;
+        IsCollide = value;
     }
 
     public void SetCanChangeColor(bool value = true)
     {
         _canChangeColor = value;
+    }
+
+    public void SetEventChannel(SystemEventChannel eventChannel)
+    {
+        _eventChannel = eventChannel;
     }
 
     public void ChangeColor()
